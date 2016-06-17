@@ -11,8 +11,8 @@ class XmlTemplate
     <html>
       <meta charset="UTF-8">
       <title>Prettysource</title>
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+      <link rel="stylesheet" href="/assets/highlight.css">
+      <script src="/assets/highlight.js"></script>
       <body>
         <pre>
           <code class="xml">
@@ -36,10 +36,7 @@ class PrettysourceApp
       if source_response.code == 200
         output = PrettyXML.write(source_response.body)
       
-        [200, {
-          'Content-Type'=>'text/html',
-          'Access-Control-Allow-Origin' => "*"
-          }, [XmlTemplate.new(output).to_s]]
+        [200, {'Content-Type'=>'text/html'}, [XmlTemplate.new(output).to_s]]
       else
         [400, {'Content-Type'=>'text/html'}, StringIO.new("Could not open #{ request.params['url'] }\n#{ source_response.inspect }")]
       end
@@ -49,4 +46,5 @@ class PrettysourceApp
   end
 end
 
+use Rack::Static, urls: ['/assets']
 run PrettysourceApp.new
