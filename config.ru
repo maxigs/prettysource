@@ -36,7 +36,10 @@ class PrettysourceApp
       if source_response.code == 200
         output = PrettyXML.write(source_response.body)
       
-        [200, {'Content-Type'=>'text/html'}, [XmlTemplate.new(output).to_s]]
+        [200, {
+          'Content-Type'=>'text/html',
+          'Access-Control-Allow-Origin' => "*"
+          }, [XmlTemplate.new(output).to_s]]
       else
         [400, {'Content-Type'=>'text/html'}, StringIO.new("Could not open #{ request.params['url'] }\n#{ source_response.inspect }")]
       end
